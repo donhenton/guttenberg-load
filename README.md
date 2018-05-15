@@ -13,4 +13,5 @@ The books folder should be adjacent to the load_data.js file.
 node load_data.js
 ```
 
-Tested with Node 8.11 and above, Using [docker-elk ](https://github.com/donhenton/docker-elk)
+Tested with Node 8.11 and above.  The elastic search version is 
+using [docker-elk ](https://github.com/donhenton/docker-elk)
