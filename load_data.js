@@ -39,10 +39,11 @@ async function insertBookData (title, author, paragraphs) {
   for (let i = 0; i < paragraphs.length; i++) {
     // Describe action
     bulkOps.push({ index: { _index: esConnection.index, _type: esConnection.type } })
-
+    let author_text = author;
     // Add document
     bulkOps.push({
       author,
+      author_text,
       title,
       location: i,
       text: paragraphs[i]

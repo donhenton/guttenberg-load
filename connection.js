@@ -37,6 +37,7 @@ async function putBookMapping () {
   const schema = {
     title: { type: 'keyword' },
     author: { type: 'keyword' },
+    author_text:{ type:'text'},
     location: { type: 'integer' },
     text: { type: 'text' }
   }
