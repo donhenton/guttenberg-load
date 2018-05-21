@@ -38,13 +38,20 @@ async function resetIndex() {
   await putBookMapping()
   await putCatalogMapping()
 }
-
+//https://www.elastic.co/guide/en/elasticsearch/reference/6.2/multi-fields.html
 /** Add book section schema mapping to ES */
 async function putBookMapping() {
   const schema = {
     title: {type: 'keyword'},
-    author: {type: 'keyword'},
-    author_text: {type: 'text'},
+    //see sample below
+    "author": {
+      "type": "text",
+      "fields": {
+        "author_key": {
+          "type": "keyword"
+        }
+      },
+    },
     location: {type: 'integer'},
     text: {type: 'text'}
   }
@@ -55,9 +62,14 @@ async function putBookMapping() {
 async function putCatalogMapping() {
   const schema = {
     title: {type: 'keyword'},
-    author: {type: 'keyword'},
-    author_text: {type: 'text'}
-
+    "author": {
+      "type": "text",
+      "fields": {
+        "author_key": {
+          "type": "keyword"
+        }
+      }
+    }
   }
 
   return client.indices.putMapping({index: card_catalog_index, type: card_catalog_type, body: {properties: schema}})
@@ -67,3 +79,29 @@ async function putCatalogMapping() {
 module.exports = {
   client, index, type, checkConnection, resetIndex, card_catalog_index, card_catalog_type
 }
+
+
+//this demonstrates the use of the fields with multiple definitionss
+
+/*
+ curl -XGET "http://elasticsearch:9200/library/book/_search" -H 'Content-Type: application/json' -d'
+ {
+ "query": {
+ "match_phrase": {
+ "author.author_key": "Charles Dickens"
+ }
+ }
+ }'
+ */
+
+/*
+ curl -XGET "http://elasticsearch:9200/library/book/_search" -H 'Content-Type: application/json' -d'
+ {
+ "query": {
+ "match_phrase": {
+ "author": "Dickens"
+ }
+ }
+ }'
+ 
+ */
