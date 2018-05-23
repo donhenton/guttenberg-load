@@ -61,12 +61,26 @@ async function putBookMapping() {
 
 async function putCatalogMapping() {
   const schema = {
-    title: {type: 'keyword'},
+    title: {
+      type: 'keyword',
+      "fields": {
+        "text": {
+          "type": "text"
+        },
+        "suggest": {
+          "type": "completion"
+        }
+      }
+
+    },
     "author": {
       "type": "text",
       "fields": {
-        "author_key": {
+        "keyword": {
           "type": "keyword"
+        },
+        "suggest": {
+          "type": "completion"
         }
       }
     }
